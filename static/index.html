@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sophia Labs — Cognitive AI Architecture Blueprint</title>
+    <meta name="description"
+        content="10-chapter architecture blueprint for building AI agents that think, remember, evolve, and self-repair. Available as PDF or live MCP server for your coding agent.">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <!-- Microsoft Clarity (free heatmaps) — replace YOUR_PROJECT_ID after setup at https://clarity.microsoft.com -->
+    <!-- <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window,document,"clarity","script","YOUR_PROJECT_ID");
+    </script> -->
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-deep: #06060f;
+            --bg-card: rgba(15, 15, 35, 0.6);
+            --border: rgba(100, 100, 255, 0.12);
+            --accent-1: #7c5cff;
+            --accent-2: #00d4ff;
+            --accent-3: #ff6bcc;
+            --text: #e0e0f0;
+            --text-dim: #8888aa;
+            --text-bright: #ffffff;
+            --glow: rgba(124, 92, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-deep);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 92, 255, 0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(0, 212, 255, 0.06), transparent),
+                radial-gradient(ellipse 50% 30% at 20% 80%, rgba(255, 107, 204, 0.05), transparent);
+        }
+
+        .bg-grid::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(124, 92, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(124, 92, 255, 0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(60px, 60px);
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Nav */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-bright);
+        }
+
+        /* Hero */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            color: var(--accent-2);
+            margin-bottom: 28px;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge .dot {
+            width: 6px;
+            height: 6px;
+            background: #00ff88;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+            }
+
+            50% {
+                opacity: 0.7;
+                box-shadow: 0 0 0 6px rgba(0, 255, 136, 0);
+            }
+        }
+
+        h1 {
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        h1 .gradient {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2), var(--accent-3));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-1), #5b3fcc);
+            color: white;
+            box-shadow: 0 4px 24px rgba(124, 92, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(124, 92, 255, 0.5);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-2);
+            color: var(--accent-2);
+        }
+
+        /* Connect section */
+        .connect {
+            margin: 60px 0;
+            padding: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .connect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-1), var(--accent-2), transparent);
+        }
+
+        .connect h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--text-bright);
+        }
+
+        .connect .label {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 0;
+        }
+
+        .code-tab {
+            padding: 8px 18px;
+            font-size: 0.78rem;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            background: rgba(30, 30, 60, 0.6);
+            color: var(--text-dim);
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .code-tab.active {
+            background: #12122a;
+            color: var(--accent-2);
+        }
+
+        .code-block {
+            background: #12122a;
+            border-radius: 0 12px 12px 12px;
+            padding: 20px 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.8;
+            color: #c8c8e0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block .key {
+            color: var(--accent-2);
+        }
+
+        .code-block .str {
+            color: #a8e6a3;
+        }
+
+        .code-block .cmd {
+            color: var(--accent-3);
+        }
+
+        .code-block .comment {
+            color: #555577;
+        }
+
+        .code-content {
+            display: none;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            background: rgba(124, 92, 255, 0.15);
+            color: var(--accent-1);
+            border: 1px solid rgba(124, 92, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background: rgba(124, 92, 255, 0.3);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin: 50px 0;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 24px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat .number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat .label {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            margin-top: 4px;
+        }
+
+        /* Tools */
+        .tools-section {
+            margin: 50px 0;
+        }
+
+        .tools-section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-bright);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .tool-card {
+            padding: 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(124, 92, 255, 0.1);
+        }
+
+        .tool-card .tool-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-2);
+            margin-bottom: 8px;
+        }
+
+        .tool-card p {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        /* Chapters */
+        .chapters {
+            margin: 60px 0;
+        }
+
+        .chapters h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            color: var(--text-bright);
+        }
+
+        .chapter-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .chapter-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .chapter-item:hover {
+            border-color: rgba(124, 92, 255, 0.3);
+        }
+
+        .ch-num {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-1);
+            background: rgba(124, 92, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 6px;
+            min-width: 32px;
+            text-align: center;
+        }
+
+        .ch-info .ch-title {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-bright);
+        }
+
+        .ch-info .ch-sub {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .free-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-left: auto;
+        }
+
+        /* CTA bottom */
+        .cta-bottom {
+            text-align: center;
+            padding: 60px 0;
+            margin: 40px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-bright);
+        }
+
+        .price span {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .cta-bottom .note {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin: 8px 0 28px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+
+        footer a {
+            color: var(--accent-1);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chapter-list {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 50px 0 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <nav>
+            <div class="logo">⬡ SOPHIA LABS</div>
+            <div class="nav-links">
+                <a href="#tools">Tools</a>
+                <a href="#chapters">Chapters</a>
+                <a href="https://sophialabs.gumroad.com" target="_blank" class="btn btn-secondary"
+                    style="padding:8px 18px;font-size:0.8rem;">Get Blueprint →</a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="badge">
+                <span class="dot"></span>
+                MCP Server Live — Connect Your Agent
+            </div>
+            <h1>
+                Build AI Agents That<br>
+                <span class="gradient">Think, Remember & Evolve</span>
+            </h1>
+            <p class="subtitle">
+                A 9-chapter architecture blueprint for cognitive AI agents.
+                Battle-tested patterns from a system running 24/7 in production.
+                Available as PDF — or query it live through your coding agent via MCP.
+            </p>
+            <div class="cta-group">
+                <a href="https://sophialabs.gumroad.com" target="_blank" class="btn btn-primary">
+                    📘 Get the Blueprint — $49
+                </a>
+                <a href="#connect" class="btn btn-secondary">
+                    ⚡ Connect via MCP — Free
+                </a>
+            </div>
+        </section>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="number">9</div>
+                <div class="label">Chapters</div>
+            </div>
+            <div class="stat">
+                <div class="number">22K</div>
+                <div class="label">Words</div>
+            </div>
+            <div class="stat">
+                <div class="number">50+</div>
+                <div class="label">Code Examples</div>
+            </div>
+            <div class="stat">
+                <div class="number">96%</div>
+                <div class="label">Cost Reduction</div>
+            </div>
+        </div>
+
+        <section class="connect" id="connect">
+            <h2>⚡ Connect in 30 Seconds</h2>
+            <p class="label">Your coding agent gets instant access to battle-tested architecture patterns</p>
+
+            <div class="code-tabs">
+                <button class="code-tab active" onclick="showTab('cursor')">Cursor</button>
+                <button class="code-tab" onclick="showTab('claude')">Claude Code</button>
+                <button class="code-tab" onclick="showTab('generic')">Other</button>
+            </div>
+            <div class="code-block">
+                <button class="copy-btn" onclick="copyCode()">Copy</button>
+                <div class="code-content active" id="tab-cursor">
+                    <span class="comment">// .cursor/mcp.json</span>
+                    {
+                    <span class="key">"mcpServers"</span>: {
+                    <span class="key">"sophia-blueprint"</span>: {
+                    <span class="key">"url"</span>: <span class="str">"https://sophialabs.gantlett.io/blueprint/mcp"</span>
+                    }
+                    }
+                    }
+                </div>
+                <div class="code-content" id="tab-claude">
+                    <span class="cmd">claude</span> mcp add sophia-blueprint \
+                    --transport http \
+                    <span class="str">https://sophialabs.gantlett.io/blueprint/mcp</span>
+                </div>
+                <div class="code-content" id="tab-generic">
+                    <span class="comment">// mcp config (any MCP-compatible client)</span>
+                    {
+                    <span class="key">"sophia-blueprint"</span>: {
+                    <span class="key">"serverUrl"</span>: <span class="str">"https://sophialabs.gantlett.io/blueprint/mcp"</span>
+                    }
+                    }
+                </div>
+            </div>
+        </section>
+
+        <section class="tools-section" id="tools">
+            <h2>4 Tools Your Agent Can Call</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-name">sophia_blueprint_list()</div>
+                    <p>List all 9 chapters with titles and descriptions. Start here to discover what's available.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">sophia_blueprint_chapter("3")</div>
+                    <p>Get the full content of any chapter by number or topic keyword. Rich markdown with code examples.
+                    </p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">sophia_blueprint_search("heartbeat")</div>
+                    <p>Semantic search across all chapters. Returns the most relevant sections with context.</p>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-name">sophia_blueprint_pattern("fleet bridge")</div>
+                    <p>Look up a specific architectural pattern. Returns implementation details and code.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="chapters" id="chapters">
+            <h2>What's Inside</h2>
+            <div class="chapter-list">
+                <div class="chapter-item">
+                    <span class="ch-num">01</span>
+                    <div class="ch-info">
+                        <div class="ch-title">The Bio-Digital Metaphor</div>
+                        <div class="ch-sub">Why living systems beat software patterns</div>
+                    </div>
+                    <span class="free-tag">FREE</span>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">02</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Identity & Personality</div>
+                        <div class="ch-sub">Persistent, evolving identity with HITL</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">03</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Multi-Tier Routing</div>
+                        <div class="ch-sub">20x faster — no LLM call for most messages</div>
+                    </div>
+                    <span class="free-tag">FREE</span>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">04</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Expert Swarm Architecture</div>
+                        <div class="ch-sub">11 agents with tool access control</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">05</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Memory Architecture</div>
+                        <div class="ch-sub">Zone-governed shared memory</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">06</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Autonomic Systems</div>
+                        <div class="ch-sub">Heartbeat, self-repair, dreaming</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">07</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Nervous System</div>
+                        <div class="ch-sub">Real-time SSE telemetry</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">08</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Model Strategy</div>
+                        <div class="ch-sub">6-tier hierarchy, 96% cost reduction</div>
+                    </div>
+                </div>
+                <div class="chapter-item">
+                    <span class="ch-num">09</span>
+                    <div class="ch-info">
+                        <div class="ch-title">Productionizing</div>
+                        <div class="ch-sub">PM2, logging, deploy checklist</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-bottom">
+            <div class="price">$49 <span>one-time</span></div>
+            <p class="note">9 chapters · 42 pages · 50+ TypeScript examples · From a system running 24/7 in production
+            </p>
+            <div class="cta-group">
+                <a href="https://sophialabs.gumroad.com" target="_blank" class="btn btn-primary">
+                    Get the Full Blueprint →
+                </a>
+                <a href="#connect" class="btn btn-secondary">
+                    Or try free via MCP
+                </a>
+            </div>
+        </section>
+
+        <footer>
+            <p>Built by <a href="https://gantlett.io">Sophia Labs</a> · Powered by a cognitive AI agent that wrote its
+                own architecture docs</p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(name) {
+            document.querySelectorAll('.code-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.code-tab').forEach(el => el.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyCode() {
+            const active = document.querySelector('.code-content.active');
+            navigator.clipboard.writeText(active.textContent.trim());
+            const btn = document.querySelector('.copy-btn');
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // ─── Telemetry Beacon ────────────────────────────────────────────
+        // Zero-cost analytics: fires beacon to /track endpoint
+        // Data flows to Cloud Run structured logging (free)
+        
+        function track(event, extra) {
+            const payload = JSON.stringify(Object.assign({
+                event: event,
+                page: location.pathname,
+                referrer: document.referrer || '',
+                ts: Date.now()
+            }, extra || {}));
+            if (navigator.sendBeacon) {
+                navigator.sendBeacon('/track', payload);
+            } else {
+                fetch('/track', { method: 'POST', body: payload, keepalive: true });
+            }
+        }
+
+        // Track page view on load
+        track('pageview');
+
+        // Track CTA clicks
+        document.querySelectorAll('.btn-primary').forEach(btn => {
+            btn.addEventListener('click', () => track('cta_blueprint'));
+        });
+        document.querySelectorAll('.btn-secondary').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const text = btn.textContent.trim();
+                if (text.includes('MCP')) track('cta_mcp');
+                else if (text.includes('free')) track('cta_free_mcp');
+            });
+        });
+
+        // Track tab switches (Cursor/Claude/Other)
+        document.querySelectorAll('.code-tab').forEach(tab => {
+            tab.addEventListener('click', () => track('tab_switch', { tab: tab.textContent.trim() }));
+        });
+
+        // Track copy button
+        const origCopy = copyCode;
+        copyCode = function() {
+            track('copy_config');
+            origCopy();
+        };
+
+        // Track scroll depth (25%, 50%, 75%, 100%)
+        const scrollMarks = {};
+        window.addEventListener('scroll', () => {
+            const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            [25, 50, 75, 100].forEach(mark => {
+                if (pct >= mark && !scrollMarks[mark]) {
+                    scrollMarks[mark] = true;
+                    track('scroll_depth', { depth: mark });
+                }
+            });
+        }, { passive: true });
+    </script>
+</body>
+
+</html>
