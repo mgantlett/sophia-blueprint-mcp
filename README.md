@@ -1,15 +1,19 @@
-# Sophia Architecture Blueprint — MCP Server
+# Sophia Labs — MCP Server
 
-> 9-chapter cognitive AI agent architecture blueprint. Query battle-tested patterns directly from your coding agent via MCP.
+> 9-chapter architecture blueprint + 7-chapter coding agent playbook. Query battle-tested AI agent patterns directly from your coding agent via MCP.
 
 [![Smithery](https://smithery.ai/badge/sophia-blueprint/architecture)](https://smithery.ai/servers/sophia-blueprint/architecture)
 [![Live](https://img.shields.io/badge/endpoint-live-brightgreen)](https://sophialabs.gantlett.io/blueprint/mcp)
+[![Website](https://img.shields.io/badge/website-sophialabs.gantlett.io-blue)](https://sophialabs.gantlett.io)
 
 ## What Is This?
 
-An MCP server that serves a **9-chapter architecture blueprint** for building cognitive AI agents. These patterns are extracted from a production system (Sophia) that has been running 24/7 for 6+ months — not theory.
+An MCP server that serves two products for building cognitive AI agents:
 
-**Topics covered**: Bio-digital architecture, identity evolution, multi-tier routing, expert swarm orchestration, memory systems, autonomic loops, nervous system observability, model strategy, and productionizing.
+- **Architecture Blueprint** (9 chapters) — Bio-digital architecture, identity evolution, multi-tier routing, expert swarm orchestration, memory systems, autonomic loops, nervous system observability, model strategy, and productionizing.
+- **Coding Agent Playbook** (7 chapters) — Parallel agent coordination, agent rules files, workflow templates, GitOps for AI teams, CLI-over-MCP patterns, and trust-based autonomy.
+
+These patterns are extracted from a production system (Sophia) that has been running 24/7 for 6+ months — not theory.
 
 ## Connect in 30 Seconds
 
@@ -33,7 +37,15 @@ Add to `.cursor/mcp.json` or `.vscode/mcp.json`:
 claude mcp add sophia-blueprint --transport http https://sophialabs.gantlett.io/blueprint/mcp
 ```
 
-## 4 Tools Available
+### Windsurf / Generic MCP Client
+
+```bash
+npx -y @anthropic-ai/mcp-remote https://sophia-knowledge-921954819222.us-central1.run.app/sse
+```
+
+## 8 Tools Available
+
+### Architecture Blueprint Tools
 
 | Tool | Description |
 |------|-------------|
@@ -42,7 +54,17 @@ claude mcp add sophia-blueprint --transport http https://sophialabs.gantlett.io/
 | `sophia_blueprint_search("heartbeat")` | Semantic search across all chapters |
 | `sophia_blueprint_pattern("fleet bridge")` | Look up specific architectural patterns |
 
+### Coding Agent Playbook Tools
+
+| Tool | Description |
+|------|-------------|
+| `sophia_playbook_list()` | List all 7 playbook chapters with titles |
+| `sophia_playbook_chapter("2")` | Get full content of any playbook chapter |
+| `sophia_playbook_search("workflow")` | Search across playbook chapters |
+
 ## Chapters
+
+### Architecture Blueprint
 
 | # | Title | Access |
 |---|-------|--------|
@@ -56,7 +78,19 @@ claude mcp add sophia-blueprint --transport http https://sophialabs.gantlett.io/
 | 08 | Model Strategy | License |
 | 09 | Productionizing | License |
 
-**Free chapters** (1 & 3) are available immediately — no auth required.  
+### Coding Agent Playbook
+
+| # | Title | Access |
+|---|-------|--------|
+| 00 | From 2020 to 2026 | **FREE** |
+| 01 | Parallel Agent Coordination | License |
+| 02 | The Agent Rules File | **FREE** |
+| 03 | Workflow Templates | License |
+| 04 | GitOps for AI Teams | License |
+| 05 | CLI Over MCP | License |
+| 06 | Trust the Agent | License |
+
+**Free chapters** are available immediately — no auth required.
 **Full access**: Get a license key at [sophialabs.gumroad.com](https://sophialabs.gumroad.com).
 
 ## Self-Hosting
@@ -85,9 +119,10 @@ docker run -p 8080:8080 sophia-blueprint
 
 ## Links
 
-- 🌐 **Landing Page**: [sophialabs.gantlett.io](https://sophialabs.gantlett.io)
-- 📘 **Full PDF**: [sophialabs.gumroad.com](https://sophialabs.gumroad.com)
-- 🐦 **Updates**: [@markgantlett](https://x.com/markgantlett)
+- **Landing Page**: [sophialabs.gantlett.io](https://sophialabs.gantlett.io)
+- **Full PDFs**: [sophialabs.gumroad.com](https://sophialabs.gumroad.com)
+- **The Project**: [Sophia Backlog](https://github.com/mgantlett/sophia-backlog) — the production system these patterns are extracted from
+- **Updates**: [@markgantlett](https://x.com/markgantlett)
 
 ## License
 
@@ -95,4 +130,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-*Built by [Sophia Labs](https://gantlett.io) — powered by a cognitive AI agent that wrote its own architecture docs.*
+*Built by [Sophia Labs](https://sophialabs.gantlett.io) — cognitive AI architecture, distilled.*
