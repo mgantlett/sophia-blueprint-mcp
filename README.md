@@ -1,6 +1,6 @@
 # Sophia Labs — MCP Server
 
-> 9-chapter architecture blueprint + 7-chapter coding agent playbook. Query battle-tested AI agent patterns directly from your coding agent via MCP.
+> Two MCP servers for building cognitive AI agents: a 9-chapter architecture blueprint + a 7-chapter coding agent playbook.
 
 [![Smithery](https://smithery.ai/badge/sophia-blueprint/architecture)](https://smithery.ai/servers/sophia-blueprint/architecture)
 [![Live](https://img.shields.io/badge/endpoint-live-brightgreen)](https://sophialabs.gantlett.io/blueprint/mcp)
@@ -8,16 +8,18 @@
 
 ## What Is This?
 
-An MCP server that serves two products for building cognitive AI agents:
+Two MCP endpoints serving production-tested patterns for building cognitive AI agents, extracted from a system running 24/7 for 6+ months:
 
-- **Architecture Blueprint** (9 chapters) — Bio-digital architecture, identity evolution, multi-tier routing, expert swarm orchestration, memory systems, autonomic loops, nervous system observability, model strategy, and productionizing.
-- **Coding Agent Playbook** (7 chapters) — Parallel agent coordination, agent rules files, workflow templates, GitOps for AI teams, CLI-over-MCP patterns, and trust-based autonomy.
+| Product | Endpoint | Tools | Topics |
+|---------|----------|-------|--------|
+| **Architecture Blueprint** | `/blueprint/mcp` | 4 | Bio-digital architecture, routing, memory, autonomics, identity |
+| **Coding Agent Playbook** | `/devops/mcp` | 3 | Agent coordination, rules files, workflows, GitOps, CLI patterns |
 
-These patterns are extracted from a production system (Sophia) that has been running 24/7 for 6+ months — not theory.
+Each product has its own Gumroad license key. Buy one or both.
 
 ## Connect in 30 Seconds
 
-### Cursor / VS Code
+### Architecture Blueprint (Cursor / VS Code)
 
 Add to `.cursor/mcp.json` or `.vscode/mcp.json`:
 
@@ -25,7 +27,21 @@ Add to `.cursor/mcp.json` or `.vscode/mcp.json`:
 {
   "mcpServers": {
     "sophia-blueprint": {
-      "url": "https://sophialabs.gantlett.io/blueprint/mcp"
+      "url": "https://sophialabs.gantlett.io/blueprint/mcp",
+      "headers": { "Authorization": "Bearer YOUR_BLUEPRINT_KEY" }
+    }
+  }
+}
+```
+
+### Coding Agent Playbook (Cursor / VS Code)
+
+```json
+{
+  "mcpServers": {
+    "sophia-playbook": {
+      "url": "https://sophialabs.gantlett.io/devops/mcp",
+      "headers": { "Authorization": "Bearer YOUR_DEVOPS_KEY" }
     }
   }
 }
@@ -34,18 +50,18 @@ Add to `.cursor/mcp.json` or `.vscode/mcp.json`:
 ### Claude Code
 
 ```bash
+# Blueprint
 claude mcp add sophia-blueprint --transport http https://sophialabs.gantlett.io/blueprint/mcp
+
+# Playbook
+claude mcp add sophia-playbook --transport http https://sophialabs.gantlett.io/devops/mcp
 ```
 
-### Windsurf / Generic MCP Client
+> **Free chapters** work without a key. License keys unlock the full content.
 
-```bash
-npx -y @anthropic-ai/mcp-remote https://sophia-knowledge-921954819222.us-central1.run.app/sse
-```
+## Tools
 
-## 8 Tools Available
-
-### Architecture Blueprint Tools
+### Architecture Blueprint — `/blueprint/mcp`
 
 | Tool | Description |
 |------|-------------|
@@ -54,7 +70,7 @@ npx -y @anthropic-ai/mcp-remote https://sophia-knowledge-921954819222.us-central
 | `sophia_blueprint_search("heartbeat")` | Semantic search across all chapters |
 | `sophia_blueprint_pattern("fleet bridge")` | Look up specific architectural patterns |
 
-### Coding Agent Playbook Tools
+### Coding Agent Playbook — `/devops/mcp`
 
 | Tool | Description |
 |------|-------------|
@@ -90,37 +106,21 @@ npx -y @anthropic-ai/mcp-remote https://sophia-knowledge-921954819222.us-central
 | 05 | CLI Over MCP | License |
 | 06 | Trust the Agent | License |
 
-**Free chapters** are available immediately — no auth required.
-**Full access**: Get a license key at [sophialabs.gumroad.com](https://sophialabs.gumroad.com).
+**Get license keys**: [sophialabs.gumroad.com](https://sophialabs.gumroad.com)
 
 ## Self-Hosting
 
 ```bash
-# Clone and run locally
 git clone https://github.com/mgantlett/sophia-blueprint-mcp.git
 cd sophia-blueprint-mcp
 pip install -r requirements.txt
 python server.py
 ```
 
-Or with Docker:
-
-```bash
-docker build -t sophia-blueprint .
-docker run -p 8080:8080 sophia-blueprint
-```
-
-## Tech Stack
-
-- **FastMCP** (Python) — Streamable HTTP transport
-- **Google Cloud Run** — Production hosting
-- **Sentence Transformers** — Semantic search embeddings
-- **Gumroad** — License key validation
-
 ## Links
 
 - **Landing Page**: [sophialabs.gantlett.io](https://sophialabs.gantlett.io)
-- **Full PDFs**: [sophialabs.gumroad.com](https://sophialabs.gumroad.com)
+- **Full PDFs + License Keys**: [sophialabs.gumroad.com](https://sophialabs.gumroad.com)
 - **The Project**: [Sophia Backlog](https://github.com/mgantlett/sophia-backlog) — the production system these patterns are extracted from
 - **Updates**: [@markgantlett](https://x.com/markgantlett)
 
